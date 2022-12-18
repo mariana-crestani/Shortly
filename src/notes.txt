@@ -1,0 +1,43 @@
+CREATE TABLE public.applicants (
+    id integer NOT NULL,
+    "userId" integer NOT NULL,
+    "jobId" integer NOT NULL
+);
+
+
+CREATE TABLE public.companies (
+    id integer NOT NULL,
+    name text NOT NULL,
+    "imageUrl" text NOT NULL
+);
+
+
+CREATE TABLE public.educations (
+    id integer NOT NULL,
+    "userId" integer NOT NULL,
+    "schoolId" integer NOT NULL,
+    "courseId" integer NOT NULL,
+    "startDate" date NOT NULL,
+    "endDate" date NOT NULL,
+    status text NOT NULL
+);
+
+CREATE TABLE public.jobs (
+    id integer NOT NULL,
+    "companyId" integer NOT NULL,
+    "roleId" integer NOT NULL,
+    description text NOT NULL,
+    salary integer NOT NULL,
+    active boolean NOT NULL
+);
+
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    name text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL,
+    "birthDate" date NOT NULL,
+    "imageUrl" text NOT NULL,
+    "cityId" integer NOT NULL
+);
