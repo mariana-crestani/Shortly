@@ -1,6 +1,8 @@
 import connectionDB from "../database/database.js";
 
 export async function urlShortener(req, res) {
+  const { url } = req.body;
+ 
   /*
 Recebe
 {

@@ -4,6 +4,6 @@ import { userValidation } from "../middlewares/schemasValidation.middlewares.js"
 
 const signUpRouter = Router();
 
-signUpRouter.post("/signup", userValidation,signUp);
+signUpRouter.post("/signup", userValidation, signUp);
 
 export default signUpRouter;
