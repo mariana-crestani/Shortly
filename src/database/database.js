@@ -4,7 +4,7 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-export const connectionDB = new Pool({
+const connectionDB = new Pool({
   host: process.env.DATABASE_HOST,
   port: process.env.DATABASE_PORT,
   user: process.env.DATABASE_USER,
@@ -13,3 +13,4 @@ export const connectionDB = new Pool({
 });
 
 //quando deployar: ssl: true
+export default connectionDB;
