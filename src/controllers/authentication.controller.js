@@ -32,10 +32,11 @@ export async function signUp(req, res) {
 export async function signIn(req, res) {
   const { email, password } = req.body;
 
-  const data = { email };
+  const data = { email }; 
   const key = process.env.JWT_SECRET;
-  const config = { expiresIn: 3600 };
-  const token = jwt.sign(data, key, config);
+  const config = { expiresIn: 3600 }; 
+  const token = jwt.sign(data, key, config); 
+
 
   try {
     const userPassword = await connectionDB.query(

@@ -16,7 +16,7 @@ CREATE TABLE "urls" (
 );
 
 
-CREATE TABLE "links" (
+CREATE TABLE "userUrls" (
 	"id" SERIAL PRIMARY KEY,
     "userId" INTEGER NOT NULL REFERENCES "users"("id"),
 	"urlId" INTEGER NOT NULL REFERENCES "urls"("id")
