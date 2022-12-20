@@ -1,4 +1,3 @@
-
 import connectionDB from "../database/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -30,6 +29,10 @@ export async function authMiddleware(req, res, next) {
       "SELECT * FROM users WHERE email = $1;",
       [data.email]
     );
+
+    if (userData.rows.length === 0) {
+      return res.status(404).send("usuário não existe");
+    }
 
     res.locals.user = userData.rows;
 

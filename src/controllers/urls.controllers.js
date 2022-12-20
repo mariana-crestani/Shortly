@@ -91,16 +91,10 @@ export async function deleteUrl(req, res) {
     await connectionDB.query(`DELETE FROM "userUrls" WHERE "urlId"=$1;`, [
       urlId,
     ]);
+    
     await connectionDB.query(`DELETE FROM urls WHERE id=$1;`, [urlId]);
 
     res.sendStatus(204);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-
-  //Se a url for do usuário, deve responder com *status code* `204` e excluir a url encurtada.
-
-  try {
   } catch (err) {
     res.status(500).send(err.message);
   }
