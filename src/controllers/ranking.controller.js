@@ -2,12 +2,25 @@ import connectionDB from "../database/database.js";
 
 export async function rankUsers(req, res) {
   try {
+
+
+// SELECT users.id, users.name, COUNT("userUrls".id) AS "linksCount", SUM(urls."visitCount") AS "visitCount"
+
+
+
+	//Dica: Para a última rota /ranking, você precisa usar left join.
+
+	const resposta = await connectionDB.query(`SELECT ;`)
+//SELECT → FROM → JOIN → WHERE → GROUP BY → ORDER BY → LIMIT → OFFSET
+
+
+// ORDER BY "visitCount" DESC LIMIT 10 
+
+
+	// res.send(body).status(200)
   } catch (err) {
     res.status(500).send(err.message);
   }
-
-  //Esta **não é** uma rota autenticada.
-  //Deve responder com *status code* `200` e corpo (*body*) no formato:
 
   /*
 [
@@ -37,8 +50,4 @@ export async function rankUsers(req, res) {
 	}
 ]
 */
-
-  //Limitado a **10 usuários.**
-  //Esta lista deve ser **ordenada** pela soma de visitas de seus links.
-  //Deve aparecer inclusive usuários cujos *links* não tiveram nenhuma visita, caso necessário.
 }
