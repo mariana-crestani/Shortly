@@ -12,17 +12,6 @@ export async function urlShortener(req, res) {
       [url, shortUrl, 0, user[0].id]
     );
 
-    /*
-    const createdUrl = await connectionDB.query(
-      `SELECT * FROM urls WHERE "shortUrl" = $1`,
-      [shortUrl]
-    );
-
-    await connectionDB.query(
-      `INSERT INTO "userUrls" ("userId","urlId") VALUES ($1, $2);`,
-      [user[0].id, createdUrl.rows[0].id]
-    );
-    */
     res.send({ shortUrl }).status(201);
   } catch (err) {
     res.status(500).send(err.message);
@@ -86,12 +75,11 @@ export async function deleteUrl(req, res) {
       return res.status(404).send("URL não encontrada");
     }
 
-
     //TESTAR ESSE RETURN!! ACHO QUE ELE JÁ ESTÁ ACONTECENDO NO USERURL
     if (userUrl.rows[0].userId !== userId) {
       return res.status(401).send("URL não pertence ao usuário");
     }
-    
+
     await connectionDB.query(`DELETE FROM urls WHERE id=$1;`, [urlId]);
 
     res.sendStatus(204);
