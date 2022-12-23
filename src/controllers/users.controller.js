@@ -4,7 +4,7 @@ export async function returnUserData(req, res) {
   const userId = res.locals.user[0].id;
 
   try {
-    const resposta = await connectionDB.query(
+    const users = await connectionDB.query(
       `SELECT 
 users.id ,users.name,
 SUM(urls."visitCount") AS "visitCount",
@@ -17,7 +17,7 @@ GROUP BY users.id;`,
       [userId]
     );
 
-    res.send(resposta.rows[0]).status(200);
+    res.send(users.rows[0]).status(200);
   } catch (err) {
     res.status(500).send(err.message);
   }
