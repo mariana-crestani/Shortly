@@ -8,10 +8,11 @@ export async function urlShortener(req, res) {
 
   try {
     await connectionDB.query(
-      `INSERT INTO urls (url, "shortUrl","visitCount") VALUES ($1, $2, $3);`,
-      [url, shortUrl, 0]
+      `INSERT INTO urls (url, "shortUrl","visitCount","userId" ) VALUES ($1, $2, $3, $4);`,
+      [url, shortUrl, 0, user[0].id]
     );
 
+    /*
     const createdUrl = await connectionDB.query(
       `SELECT * FROM urls WHERE "shortUrl" = $1`,
       [shortUrl]
@@ -21,6 +22,7 @@ export async function urlShortener(req, res) {
       `INSERT INTO "userUrls" ("userId","urlId") VALUES ($1, $2);`,
       [user[0].id, createdUrl.rows[0].id]
     );
+    */
     res.send({ shortUrl }).status(201);
   } catch (err) {
     res.status(500).send(err.message);
@@ -76,7 +78,7 @@ export async function deleteUrl(req, res) {
 
   try {
     const userUrl = await connectionDB.query(
-      `SELECT "userId" FROM "userUrls" WHERE "userUrls"."urlId" = $1;`,
+      `SELECT "userId" FROM urls WHERE urls.id = $1;`,
       [urlId]
     );
 
@@ -84,13 +86,11 @@ export async function deleteUrl(req, res) {
       return res.status(404).send("URL não encontrada");
     }
 
-    if (userUrl.rows[0].userId !== userId) {
-      return res.status(401).send("URL não pertence ao usiuário");
-    }
 
-    await connectionDB.query(`DELETE FROM "userUrls" WHERE "urlId"=$1;`, [
-      urlId,
-    ]);
+    //TESTAR ESSE RETURN!! ACHO QUE ELE JÁ ESTÁ ACONTECENDO NO USERURL
+    if (userUrl.rows[0].userId !== userId) {
+      return res.status(401).send("URL não pertence ao usuário");
+    }
     
     await connectionDB.query(`DELETE FROM urls WHERE id=$1;`, [urlId]);
 
