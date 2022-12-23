@@ -1,5 +1,12 @@
 import { nanoid } from "nanoid";
-import connectionDB from "../database/database.js";
+import {
+  deleteUrlQuery,
+  findUrlId,
+  findUserId,
+  insertUrl,
+  updateUrl,
+  returnUrls,
+} from "../repositories/urls.repositories.js";
 
 export async function urlShortener(req, res) {
   const { url } = req.body;
@@ -7,10 +14,7 @@ export async function urlShortener(req, res) {
   const shortUrl = nanoid(6);
 
   try {
-    await connectionDB.query(
-      `INSERT INTO urls (url, "shortUrl","visitCount","userId" ) VALUES ($1, $2, $3, $4);`,
-      [url, shortUrl, 0, user[0].id]
-    );
+    await insertUrl(url, shortUrl, user);
 
     res.send({ shortUrl }).status(201);
   } catch (err) {
@@ -22,10 +26,7 @@ export async function returnUrl(req, res) {
   const id = req.params.id;
 
   try {
-    const url = await connectionDB.query(
-      `SELECT urls.id AS id , urls.url AS url, urls."shortUrl" AS "shortUrl" FROM urls WHERE urls.id=$1;`,
-      [id]
-    );
+    const url = await findUrlId(id);
 
     if (url.rows.length === 0) {
       return res.status(404).send("URL não encontrada");
@@ -41,19 +42,13 @@ export async function viewUrl(req, res) {
   const shortUrl = req.params.shortUrl;
 
   try {
-    const urls = await connectionDB.query(
-      `SELECT urls.url AS url,urls."visitCount" AS "visitCount" FROM urls WHERE urls."shortUrl"=$1;`,
-      [shortUrl]
-    );
+    const urls = await returnUrls(shortUrl);
 
     if (!urls.rows[0]) {
       return res.status(404).send("URL não encontrada");
     }
 
-    await connectionDB.query(
-      `UPDATE urls SET "visitCount"=$1  WHERE urls."shortUrl"=$2;`,
-      [(urls.rows[0].visitCount += 1), shortUrl]
-    );
+    await updateUrl(urls, shortUrl);
 
     res.redirect(`${urls.rows[0].url}`);
   } catch (err) {
@@ -66,10 +61,7 @@ export async function deleteUrl(req, res) {
   const userId = res.locals.user[0].id;
 
   try {
-    const userUrl = await connectionDB.query(
-      `SELECT "userId" FROM urls WHERE urls.id = $1;`,
-      [urlId]
-    );
+    const userUrl = await findUserId(urlId);
 
     if (userUrl.rows.length === 0) {
       return res.status(404).send("URL não encontrada");
@@ -80,7 +72,7 @@ export async function deleteUrl(req, res) {
       return res.status(401).send("URL não pertence ao usuário");
     }
 
-    await connectionDB.query(`DELETE FROM urls WHERE id=$1;`, [urlId]);
+    await deleteUrlQuery(urlId);
 
     res.sendStatus(204);
   } catch (err) {

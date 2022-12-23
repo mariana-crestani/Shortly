@@ -1,6 +1,6 @@
-import connectionDB from "../database/database.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { findUser } from "../repositories/authentication.repositories.js";
 dotenv.config();
 
 export async function authMiddleware(req, res, next) {
@@ -25,10 +25,7 @@ export async function authMiddleware(req, res, next) {
 
     const data = jwt.verify(token, process.env.JWT_SECRET);
 
-    const userData = await connectionDB.query(
-      "SELECT * FROM users WHERE email = $1;",
-      [data.email]
-    );
+    const userData = await findUser(data.email);
 
     if (userData.rows.length === 0) {
       return res.status(404).send("usuário não existe");

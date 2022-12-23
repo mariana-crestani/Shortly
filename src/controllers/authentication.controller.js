@@ -1,8 +1,8 @@
-import connectionDB from "../database/database.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import {
+  findPassword,
   findUser,
   insertUser,
 } from "../repositories/authentication.repositories.js";
@@ -36,10 +36,7 @@ export async function signIn(req, res) {
   const token = jwt.sign(data, key, config);
 
   try {
-    const userPassword = await connectionDB.query(
-      "SELECT password FROM users WHERE email = $1;",
-      [email]
-    );
+    const userPassword = await findPassword(email);
 
     if (userPassword.rows.length === 0) {
       return res.status(401).send("Email não existe");

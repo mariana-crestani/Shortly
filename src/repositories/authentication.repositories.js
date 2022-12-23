@@ -10,3 +10,9 @@ export function insertUser(name, email, hashPassword) {
     [name, email, hashPassword]
   );
 }
+
+export function findPassword(email) {
+  return connectionDB.query("SELECT password FROM users WHERE email = $1;", [
+    email,
+  ]);
+}
