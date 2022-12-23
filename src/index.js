@@ -12,6 +12,3 @@ app.use(route);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
-
-
-//sudo su -c "pg_dump shortly_database --inserts --no-owner" postgres > dump.sql

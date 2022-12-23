@@ -67,7 +67,6 @@ export async function deleteUrl(req, res) {
       return res.status(404).send("URL não encontrada");
     }
 
-    //TESTAR ESSE RETURN!! ACHO QUE ELE JÁ ESTÁ ACONTECENDO NO USERURL
     if (userUrl.rows[0].userId !== userId) {
       return res.status(401).send("URL não pertence ao usuário");
     }
