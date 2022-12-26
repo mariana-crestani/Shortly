@@ -4,10 +4,11 @@ export function returnRanking() {
   return connectionDB.query(`SELECT 
 	users.id, users.name, 
 	COUNT(urls.id) AS "linksCount", 
-	SUM(urls."visitCount") AS "visitCount"
+	COALESCE(SUM(urls."visitCount"), 0) AS "visitCount"
 	FROM users
-	JOIN urls ON urls."userId" = users.id
+	LEFT JOIN urls ON urls."userId" = users.id
 	GROUP BY users.id
-	ORDER BY "visitCount" DESC LIMIT 10 
+	ORDER BY "visitCount" DESC 
+	LIMIT 10 
 	;`);
 }
