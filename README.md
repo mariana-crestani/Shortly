@@ -4,7 +4,6 @@ URL shortener API using Node + Express and PostgreSQL
 
 
 ## How to run for development
-#
 
 1. Clone this repository
 
